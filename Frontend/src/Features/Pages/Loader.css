@@ -1,0 +1,751 @@
+/* ================================================================
+   Loader.css — Krishna Fashion Animated Storyline Loader
+   Story: Krishna floats in → Flute appears → Leaves fly in → Brand text
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@400;600&display=swap');
+
+/* ──────────────────────────────────────────────────────────────
+   KEYFRAMES — Storyline Animation Stages
+   ────────────────────────────────────────────────────────────── */
+
+/* Stage 0: Overlay fade in */
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Stage 1a: Ambient glow pulse */
+@keyframes glowPulse {
+  0%,100% { opacity: 0.35; transform: scale(1);    }
+  50%      { opacity: 0.7;  transform: scale(1.12); }
+}
+
+/* Stage 1b: Krishna rises from below the scene */
+@keyframes krishnaRise {
+  0%   { transform: translateY(200px) scale(0.85); opacity: 0; }
+  55%  { opacity: 1; }
+  100% { transform: translateY(0)     scale(1);    opacity: 1; }
+}
+
+/* Stage 1c: Krishna continuous gentle float (runs after rise) */
+@keyframes krishnaFloat {
+  0%,100% { transform: translateY(0px)  rotate(0deg);    }
+  30%     { transform: translateY(-14px) rotate(0.6deg); }
+  70%     { transform: translateY(-8px)  rotate(-0.4deg); }
+}
+
+/* Stage 1d: Divine halo pulse */
+@keyframes haloPulse {
+  0%,100% { box-shadow: 0 0 40px 14px rgba(212,175,55,0.18), 0 0 80px 30px rgba(100,200,255,0.08); }
+  50%     { box-shadow: 0 0 70px 25px rgba(212,175,55,0.35), 0 0 120px 50px rgba(100,200,255,0.15); }
+}
+
+/* Stage 1e: Crown feather wave */
+@keyframes featherWave {
+  0%,100% { transform: rotate(0deg)   scaleY(1);    }
+  50%     { transform: rotate(3deg)   scaleY(1.06); }
+}
+
+/* Stage 2: Flute scales in from center */
+@keyframes fluteAppear {
+  0%   { transform: translateX(-50%) scaleX(0); opacity: 0; }
+  40%  { opacity: 1; }
+  100% { transform: translateX(-50%) scaleX(1); opacity: 1; }
+}
+
+/* Stage 2b: Flute continuous golden glow */
+@keyframes fluteGlow {
+  0%,100% { box-shadow: 0 0 12px rgba(212,175,55,0.5), 0 2px 0 rgba(255,255,255,0.15) inset; }
+  50%     { box-shadow: 0 0 28px rgba(212,175,55,0.85), 0 2px 0 rgba(255,255,255,0.25) inset; }
+}
+
+/* Stage 3a: Leaves fly from the LEFT side */
+@keyframes leafFromLeft {
+  0% {
+    transform: translateX(-380px) translateY(60px) rotate(-70deg) scale(0.4);
+    opacity: 0;
+  }
+  25% { opacity: 1; }
+  100% {
+    transform: translateX(0) translateY(0) rotate(var(--rot)) scale(1);
+    opacity: 0.92;
+  }
+}
+
+/* Stage 3b: Leaves fly from the RIGHT side */
+@keyframes leafFromRight {
+  0% {
+    transform: translateX(380px) translateY(-50px) rotate(70deg) scale(0.4);
+    opacity: 0;
+  }
+  25% { opacity: 1; }
+  100% {
+    transform: translateX(0) translateY(0) rotate(var(--rot)) scale(1);
+    opacity: 0.92;
+  }
+}
+
+/* Stage 3c: Gentle leaf sway after landing */
+@keyframes leafSway {
+  0%,100% { transform: rotate(var(--rot)) scale(1);    }
+  50%     { transform: rotate(calc(var(--rot) + 6deg)) scale(1.06); }
+}
+
+/* Stage 4a: Brand name text reveal (clip-path wipe left→right) */
+@keyframes brandWipe {
+  0%   { clip-path: inset(0 100% 0 0); opacity: 0;   letter-spacing: 12px; }
+  15%  { opacity: 1; }
+  100% { clip-path: inset(0 0%   0 0); opacity: 1;   letter-spacing: 6px;  }
+}
+
+/* Stage 4b: Tagline fade up */
+@keyframes taglineUp {
+  0%   { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0);    }
+}
+
+/* Loading dots bounce */
+@keyframes dotBounce {
+  0%,80%,100% { transform: translateY(0)   scale(0.75); opacity: 0.4; }
+  40%         { transform: translateY(-10px) scale(1.1);  opacity: 1;   }
+}
+
+/* Floating music notes */
+@keyframes noteRise {
+  0%   { opacity: 0;   transform: translateY(0)   scale(0)   rotate(0deg);   }
+  20%  { opacity: 0.75; }
+  100% { opacity: 0;   transform: translateY(-70px) scale(1.3) rotate(25deg); }
+}
+
+/* Spinning stars / sparkles around the scene */
+@keyframes sparkleIn {
+  0%   { opacity: 0; transform: scale(0) rotate(0deg);    }
+  50%  { opacity: 1; transform: scale(1) rotate(180deg);  }
+  100% { opacity: 0; transform: scale(0) rotate(360deg);  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BASE — Overlay & Scene
+   ────────────────────────────────────────────────────────────── */
+
+.kf-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(ellipse at center, #0b1220 0%, #060a10 60%, #030508 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: overlayIn 0.5s ease forwards;
+  font-family: 'Cinzel', serif;
+}
+
+.kf-scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BACKGROUND GLOWS
+   ────────────────────────────────────────────────────────────── */
+
+.kf-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+.kf-glow-teal {
+  width: 500px; height: 400px;
+  top: calc(50% - 250px); left: calc(50% - 250px);
+  background: radial-gradient(circle, rgba(0,188,212,0.12) 0%, transparent 70%);
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+.kf-glow-gold {
+  width: 350px; height: 300px;
+  top: calc(50% - 80px); left: calc(50% - 175px);
+  background: radial-gradient(circle, rgba(212,175,55,0.14) 0%, transparent 70%);
+  animation: glowPulse 3.5s ease-in-out 0.8s infinite;
+}
+
+.kf-glow-blue {
+  width: 600px; height: 200px;
+  bottom: 15%; left: calc(50% - 300px);
+  background: radial-gradient(ellipse, rgba(63,94,251,0.08) 0%, transparent 70%);
+  animation: glowPulse 5s ease-in-out 1.2s infinite;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   MUSIC NOTES (floating decoration)
+   ────────────────────────────────────────────────────────────── */
+
+.kf-note {
+  position: absolute;
+  font-size: 18px;
+  color: rgba(212,175,55,0.55);
+  pointer-events: none;
+  animation: noteRise 3s ease-out infinite;
+}
+.kf-note-1 { left: calc(50% - 90px);  top: calc(50% - 60px);  animation-delay: 1.4s; font-size: 14px; }
+.kf-note-2 { left: calc(50% + 70px);  top: calc(50% - 80px);  animation-delay: 2.1s; font-size: 20px; }
+.kf-note-3 { left: calc(50% - 50px);  top: calc(50% - 40px);  animation-delay: 2.9s; font-size: 12px; }
+.kf-note-4 { left: calc(50% + 45px);  top: calc(50% - 55px);  animation-delay: 3.6s; font-size: 16px; }
+
+/* ──────────────────────────────────────────────────────────────
+   KRISHNA FIGURE — Animation Wrapper
+   ────────────────────────────────────────────────────────────── */
+
+/* Outer: handles the entrance (rise from below) */
+.kf-krishna-enter {
+  position: absolute;
+  top: calc(50% - 160px);
+  left: calc(50% - 45px);
+  width: 90px;
+  animation: krishnaRise 1.1s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s both;
+}
+
+/* Inner: handles the continuous float after entry */
+.kf-krishna-float {
+  position: relative;
+  width: 90px;
+  animation: krishnaFloat 2.8s ease-in-out 1.4s infinite;
+}
+
+/* ── Halo (divine light ring) ── */
+.kf-halo {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  top: 18px;
+  left: 0;
+  border: 2px solid rgba(212,175,55,0.3);
+  background: transparent;
+  animation: haloPulse 3s ease-in-out 1.4s infinite;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   CROWN / PEACOCK FEATHER
+   ────────────────────────────────────────────────────────────── */
+
+.kf-crown {
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 50px;
+}
+
+/* Central stem of the peacock feather */
+.kf-crown-stem {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 3px; height: 36px;
+  background: linear-gradient(to top, #26c6da, #4dd0e1);
+  border-radius: 2px;
+  animation: featherWave 2s ease-in-out 1.5s infinite;
+}
+
+/* Feather fans — 7 strands fanning out */
+.kf-feather {
+  position: absolute;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 2px;
+  transform-origin: bottom center;
+  animation: featherWave 2s ease-in-out 1.5s infinite;
+}
+.kf-feather-0 { height: 14px; left: 16px; background: linear-gradient(to top,#00bcd4,#80deea); transform: rotate(-48deg); }
+.kf-feather-1 { height: 20px; left: 20px; background: linear-gradient(to top,#00bcd4,#4dd0e1); transform: rotate(-28deg); animation-delay: 1.6s; }
+.kf-feather-2 { height: 26px; left: 25px; background: linear-gradient(to top,#00acc1,#e0f7fa); transform: rotate(-12deg); animation-delay: 1.7s; }
+.kf-feather-3 { height: 28px; left: 29px; background: linear-gradient(to top,#00bcd4,#ffffff); transform: rotate(0deg);   animation-delay: 1.65s; }
+.kf-feather-4 { height: 26px; left: 33px; background: linear-gradient(to top,#00acc1,#e0f7fa); transform: rotate(12deg);  animation-delay: 1.7s; }
+.kf-feather-5 { height: 20px; left: 37px; background: linear-gradient(to top,#00bcd4,#4dd0e1); transform: rotate(28deg);  animation-delay: 1.6s; }
+.kf-feather-6 { height: 14px; left: 41px; background: linear-gradient(to top,#00bcd4,#80deea); transform: rotate(48deg);  }
+
+/* Peacock eye at feather tip */
+.kf-peacock-eye {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 11px; height: 15px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #1565c0 25%, #4dd0e1 60%, #ce93d8 100%);
+  box-shadow: 0 0 8px rgba(0,188,212,0.7);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   HEAD
+   ────────────────────────────────────────────────────────────── */
+
+.kf-head {
+  position: absolute;
+  top: 14px; left: 50%;
+  transform: translateX(-50%);
+  width: 58px; height: 62px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, #2563a8 0%, #1a3a7a 60%, #102050 100%);
+  box-shadow: 0 0 18px rgba(37,99,168,0.45), inset -4px -4px 10px rgba(0,0,0,0.4);
+  overflow: visible;
+  z-index: 2;
+}
+
+/* Yellow earring dots */
+.kf-head::before,
+.kf-head::after {
+  content: '';
+  position: absolute;
+  top: 22px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #f5e06e);
+  box-shadow: 0 0 6px rgba(212,175,55,0.7);
+}
+.kf-head::before { left: -5px; }
+.kf-head::after  { right: -5px; }
+
+/* Tilak (bindi on forehead) */
+.kf-tilak {
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translateX(-50%);
+  width: 6px; height: 12px;
+  background: linear-gradient(to bottom, #fff, #f5e06e);
+  border-radius: 3px 3px 50% 50%;
+  box-shadow: 0 0 6px rgba(255,255,255,0.6);
+}
+
+/* Eyes */
+.kf-eyes {
+  position: absolute;
+  top: 26px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+}
+
+.kf-eye {
+  width: 8px; height: 5px;
+  border-radius: 50%;
+  background: #0a0a15;
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 0 4px rgba(255,255,255,0.2);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   NECKLACE
+   ────────────────────────────────────────────────────────────── */
+
+.kf-necklace {
+  position: absolute;
+  top: 72px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.kf-bead {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #f5e06e);
+  box-shadow: 0 0 4px rgba(212,175,55,0.6);
+}
+.kf-bead:nth-child(3) {
+  width: 9px; height: 9px;
+  background: radial-gradient(circle, #f5e06e, #d4af37);
+  box-shadow: 0 0 8px rgba(212,175,55,0.8);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BODY (Dhoti / Torso)
+   ────────────────────────────────────────────────────────────── */
+
+.kf-body {
+  position: absolute;
+  top: 76px; left: 50%;
+  transform: translateX(-50%);
+  width: 68px; height: 78px;
+  background: linear-gradient(180deg, #f5a623 0%, #e67e22 55%, #d35400 100%);
+  border-radius: 8px 8px 30px 30px;
+  box-shadow: 0 4px 16px rgba(230,126,34,0.3), inset -4px -4px 12px rgba(0,0,0,0.25);
+  z-index: 1;
+}
+
+/* Dhoti belt */
+.kf-body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 10px;
+  background: linear-gradient(90deg, #d4af37, #f5e06e, #d4af37);
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 2px 6px rgba(212,175,55,0.5);
+}
+
+/* Body central stripe */
+.kf-body::after {
+  content: '';
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translateX(-50%);
+  width: 3px; height: 60px;
+  background: linear-gradient(to bottom, rgba(212,175,55,0.5), transparent);
+  border-radius: 2px;
+}
+
+/* ── Arms ── */
+.kf-arm {
+  position: absolute;
+  top: 14px;
+  width: 38px; height: 10px;
+  background: linear-gradient(90deg, #1a3a7a, #2563a8);
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.kf-arm-l {
+  left: -34px;
+  transform: rotate(22deg);
+  transform-origin: right center;
+  border-radius: 5px 2px 2px 5px;
+}
+
+.kf-arm-r {
+  right: -34px;
+  transform: rotate(-22deg);
+  transform-origin: left center;
+  border-radius: 2px 5px 5px 2px;
+}
+
+/* ── Dhoti bottom ── */
+.kf-dhoti {
+  position: absolute;
+  bottom: -18px; left: 50%;
+  transform: translateX(-50%);
+  width: 72px; height: 22px;
+  background: linear-gradient(180deg, #d35400, #e67e22);
+  border-radius: 0 0 36px 36px;
+  clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LEGS
+   ────────────────────────────────────────────────────────────── */
+
+.kf-legs {
+  position: absolute;
+  top: 152px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.kf-leg {
+  width: 16px; height: 42px;
+  background: linear-gradient(180deg, #1a3a7a 0%, #102050 100%);
+  border-radius: 8px 8px 12px 12px;
+  box-shadow: inset -2px -2px 6px rgba(0,0,0,0.3);
+}
+
+/* Feet / anklets */
+.kf-leg::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 7px;
+  background: linear-gradient(90deg, #d4af37, #f5e06e);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 0 6px rgba(212,175,55,0.5);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   FLUTE — Stage 2
+   ────────────────────────────────────────────────────────────── */
+
+.kf-flute-wrap {
+  position: absolute;
+  top: calc(50% - 60px);
+  left: 50%;
+  width: 260px;
+  height: 14px;
+  transform: translateX(-50%);
+}
+
+.kf-flute {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) scaleX(0);
+  width: 260px; height: 14px;
+  background: linear-gradient(
+    90deg,
+    #a07820 0%,
+    #d4af37 20%,
+    #f5e06e 45%,
+    #d4af37 70%,
+    #a07820 100%
+  );
+  border-radius: 7px;
+  box-shadow:
+    0 0 14px rgba(212,175,55,0.55),
+    0 3px 0 rgba(0,0,0,0.35),
+    inset 0 2px 0 rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0 28px;
+
+  /* Stage 2: appear after Krishna arrives */
+  animation:
+    fluteAppear 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 1.1s forwards,
+    fluteGlow   2s ease-in-out 1.9s infinite;
+}
+
+.kf-flute-hole {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(212,175,55,0.35);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LEAVES — Stage 3
+   Leaves use CSS clip-path for a natural pointed leaf shape.
+   ────────────────────────────────────────────────────────────── */
+
+.kf-leaf {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50% 5% 50% 5%;
+}
+
+/* ── LEFT LEAVES ── */
+/* Each leaf: position = where it LANDS (after animation) */
+
+.kf-leaf-l1 {
+  --rot: -35deg;
+  width: 28px; height: 44px;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 0 10px rgba(46,204,113,0.3);
+  top: calc(50% - 80px);
+  left: calc(50% - 148px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.4s both,
+    leafSway     2.2s ease-in-out 2.2s infinite;
+}
+
+.kf-leaf-l2 {
+  --rot: -15deg;
+  width: 22px; height: 36px;
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  box-shadow: 0 0 8px rgba(26,188,156,0.3);
+  top: calc(50% - 62px);
+  left: calc(50% - 118px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromLeft 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.65s both,
+    leafSway     2.4s ease-in-out 2.4s infinite;
+}
+
+.kf-leaf-l3 {
+  --rot: -50deg;
+  width: 18px; height: 30px;
+  background: linear-gradient(135deg, #27ae60, #1e8449);
+  box-shadow: 0 0 7px rgba(39,174,96,0.25);
+  top: calc(50% - 48px);
+  left: calc(50% - 162px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromLeft 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.9s both,
+    leafSway     2s ease-in-out 2.6s infinite;
+}
+
+.kf-leaf-l4 {
+  --rot: -20deg;
+  width: 32px; height: 52px;
+  background: linear-gradient(135deg, #58d68d, #2ecc71);
+  box-shadow: 0 0 12px rgba(88,214,141,0.25);
+  top: calc(50% - 95px);
+  left: calc(50% - 130px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromLeft 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.1s both,
+    leafSway     2.6s ease-in-out 2.8s infinite;
+}
+
+/* ── RIGHT LEAVES ── */
+
+.kf-leaf-r1 {
+  --rot: 30deg;
+  width: 28px; height: 44px;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 0 10px rgba(46,204,113,0.3);
+  top: calc(50% - 76px);
+  left: calc(50% + 118px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s both,
+    leafSway      2.2s ease-in-out 2.3s infinite;
+}
+
+.kf-leaf-r2 {
+  --rot: 12deg;
+  width: 22px; height: 36px;
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  box-shadow: 0 0 8px rgba(26,188,156,0.3);
+  top: calc(50% - 58px);
+  left: calc(50% + 92px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromRight 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.75s both,
+    leafSway      2.4s ease-in-out 2.5s infinite;
+}
+
+.kf-leaf-r3 {
+  --rot: 55deg;
+  width: 18px; height: 30px;
+  background: linear-gradient(135deg, #27ae60, #1e8449);
+  box-shadow: 0 0 7px rgba(39,174,96,0.25);
+  top: calc(50% - 44px);
+  left: calc(50% + 138px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.0s both,
+    leafSway      2s ease-in-out 2.7s infinite;
+}
+
+.kf-leaf-r4 {
+  --rot: 22deg;
+  width: 32px; height: 52px;
+  background: linear-gradient(135deg, #58d68d, #2ecc71);
+  box-shadow: 0 0 12px rgba(88,214,141,0.25);
+  top: calc(50% - 90px);
+  left: calc(50% + 100px);
+  transform: rotate(var(--rot));
+  animation:
+    leafFromRight 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2.2s both,
+    leafSway      2.6s ease-in-out 2.9s infinite;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BRAND TEXT — Stage 4
+   Appears BELOW the flute, after leaves land.
+   ────────────────────────────────────────────────────────────── */
+
+.kf-brand-wrap {
+  position: absolute;
+  top: calc(50% + 100px);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.kf-brand-name-row {
+  overflow: hidden;
+  animation: brandWipe 1.1s cubic-bezier(0.22, 1, 0.36, 1) 2.5s both;
+}
+
+.kf-brand-name {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(28px, 5vw, 46px);
+  font-weight: 900;
+  letter-spacing: 6px;
+  background: linear-gradient(135deg, #a07820 0%, #d4af37 30%, #f5e06e 55%, #d4af37 78%, #a07820 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 20px rgba(212,175,55,0.5));
+  text-transform: uppercase;
+}
+
+.kf-tagline-row {
+  margin-top: 8px;
+  animation: taglineUp 0.8s ease 3.5s both;
+}
+
+.kf-tagline {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  color: rgba(212,175,55,0.65);
+  text-transform: uppercase;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LOADING DOTS — Stage 5
+   ────────────────────────────────────────────────────────────── */
+
+.kf-dots {
+  position: absolute;
+  top: calc(50% + 172px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  animation: taglineUp 0.6s ease 3.8s both;
+}
+
+.kf-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4af37, #f5e06e);
+  box-shadow: 0 0 8px rgba(212,175,55,0.5);
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+.kf-dot:nth-child(1) { animation-delay: 0s;    }
+.kf-dot:nth-child(2) { animation-delay: 0.2s;  }
+.kf-dot:nth-child(3) { animation-delay: 0.4s;  }
+
+/* ──────────────────────────────────────────────────────────────
+   SPARKLE DECORATIONS (scattered around the scene)
+   ────────────────────────────────────────────────────────────── */
+
+.kf-sparkle {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 1px;
+  background: #d4af37;
+  opacity: 0;
+  animation: sparkleIn 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.kf-sparkle-1  { top: 20%; left: 18%;  animation-delay: 0.5s;  width: 5px;  height: 5px;  }
+.kf-sparkle-2  { top: 15%; left: 75%;  animation-delay: 1.2s;  background: #80deea; }
+.kf-sparkle-3  { top: 70%; left: 12%;  animation-delay: 0.8s;  width: 4px;  height: 4px; background: #58d68d; }
+.kf-sparkle-4  { top: 75%; left: 82%;  animation-delay: 1.6s;  background: #80deea; }
+.kf-sparkle-5  { top: 30%; left: 88%;  animation-delay: 2.2s;  width: 5px;  height: 5px;  }
+.kf-sparkle-6  { top: 82%; left: 42%;  animation-delay: 1.9s;  background: #58d68d; width: 4px; height: 4px; }
+.kf-sparkle-7  { top: 12%; left: 48%;  animation-delay: 0.3s;  }
+.kf-sparkle-8  { top: 55%; left: 5%;   animation-delay: 2.5s;  background: #80deea; }
+.kf-sparkle-9  { top: 40%; left: 92%;  animation-delay: 1.1s;  width: 5px;  height: 5px; background: #58d68d; }
+.kf-sparkle-10 { top: 88%; left: 60%;  animation-delay: 0.7s;  }
+
+/* ──────────────────────────────────────────────────────────────
+   RESPONSIVE
+   ────────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .kf-brand-name  { font-size: 26px; letter-spacing: 3px; }
+  .kf-flute       { width: 200px; }
+  .kf-flute-wrap  { width: 200px; }
+  .kf-leaf-l1, .kf-leaf-l4 { left: calc(50% - 118px); }
+  .kf-leaf-r1, .kf-leaf-r4 { left: calc(50% + 90px);  }
+}

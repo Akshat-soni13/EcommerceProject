@@ -1,46 +1,120 @@
-import mongoose  from "mongoose";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { compare } from './../../../node_modules/bcryptjs/index';
 
-// Idhar hamae model aisa bana na hai so that we can do role base acess 
+// ==========================================
+// User Model - Role Based Access Control
+// Roles: buyer | seller | admin
+// ==========================================
 
-// role hame model me field bana nai padegi 
+const userSchema = new mongoose.Schema(
+  {
+    fullname: {
+      type: String,
+      required: [true, "Full name is required"],
+      trim: true,
+      minlength: [3, "Full name must be at least 3 characters"],
+      maxlength: [60, "Full name cannot exceed 60 characters"],
+    },
 
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
+    },
 
-const userSchema = new mongoose.Schema({
-    email:{type:String,required:true,unique:true},
-    contact:{type:String,required: true},
-    password:{type:String,required:true},
-    fullname:{type:String,required:true},
-    role:{type:String,enum:["buyer","seller","admin"],default:"buyer"} 
+    contact: {
+      type: String,
+      required: [true, "Contact number is required"],
+      unique: true,
+      match: [/^\d{10}$/, "Contact must be a valid 10-digit number"],
+    },
 
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      minlength: [6, "Password must be at least 6 characters"],
+    },
 
+    role: {
+      type: String,
+      enum: {
+        values: ["buyer", "seller", "admin"],
+        message: "Role must be buyer, seller, or admin",
+      },
+      default: "buyer",
+    },
 
-})
+    // Profile & preferences
+    avatar: {
+      type: String,
+      default: null,
+    },
 
-userSchema.pre("save",async function ()
-{
-    if(!this.isModified("password"))
-        return
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
 
-    const hash = await bcrypt.hash(this.password,10)
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
 
-    this.password = hash
+    // Seller specific — only relevant when role = seller
+    shopName: {
+      type: String,
+      trim: true,
+      default: null,
+    },
 
-})
+    // Timestamps for activity tracking
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+  },
+  {
+    timestamps: true, // adds createdAt and updatedAt automatically
+  }
+);
 
+// ==========================================
+// Pre-save Hook: Hash password before saving
+// ==========================================
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
-userSchema.methods.comparePassword = async function (password)
-{
-    return await bcrypt.compare(password,this.password)
-    
-}
+  const hash = await bcrypt.hash(this.password, 12);
+  this.password = hash;
+});
 
+// ==========================================
+// Instance Method: Compare password
+// ==========================================
+userSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
-const userModel = mongoose.model("user",userSchema)
+// ==========================================
+// Instance Method: Get safe user object (no password)
+// ==========================================
+userSchema.methods.toSafeObject = function () {
+  return {
+    id: this._id,
+    fullname: this.fullname,
+    email: this.email,
+    contact: this.contact,
+    role: this.role,
+    avatar: this.avatar,
+    shopName: this.shopName,
+    isVerified: this.isVerified,
+    createdAt: this.createdAt,
+  };
+};
 
-export default  userModel
+const userModel = mongoose.model("user", userSchema);
 
-
-// Now After that to ensure data is correct we  use express validator to validate data 
-
+export default userModel;
