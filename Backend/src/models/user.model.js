@@ -63,12 +63,6 @@ const userSchema = new mongoose.Schema(
       default: true,
     },
 
-    // Seller specific — only relevant when role = seller
-    shopName: {
-      type: String,
-      trim: true,
-      default: null,
-    },
 
     // Timestamps for activity tracking
     lastLogin: {
@@ -109,7 +103,6 @@ userSchema.methods.toSafeObject = function () {
     contact: this.contact,
     role: this.role,
     avatar: this.avatar,
-    shopName: this.shopName,
     isVerified: this.isVerified,
     createdAt: this.createdAt,
   };

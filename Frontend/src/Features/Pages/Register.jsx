@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { userAuth } from "../Auth/Hook/useAuth";
 import { useSelector } from "react-redux";
-import "./Register.css";
-import KrishnaLoader from "./Loader";
+import "../Styles/Register.css";
+import KrishnaLoader from "../Styles/Loader"
 
 
 // ── Password strength helper ─────────────────────────────────────────────────

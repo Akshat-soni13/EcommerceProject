@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import RegisterPage from "../Features/Pages/Register";
-import KrishnaLoader from "../Features/Pages/Loader";
+import KrishnaLoader from "../Features/Styles/Loader"
+
+import Login from "../Features/Pages/Login"
 
 export const routes = createBrowserRouter([
   {
@@ -15,5 +17,11 @@ export const routes = createBrowserRouter([
 
     path: "/loader",
     element: <KrishnaLoader></KrishnaLoader>
+  },
+
+  {
+
+    path: "/Login",
+    element: <Login></Login>
   },
 ]);

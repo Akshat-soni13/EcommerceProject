@@ -66,10 +66,7 @@ export const register = async (req, res) => {
       role: isSeller ? "seller" : "buyer",
     };
 
-    // If registering as seller, optionally include shop name
-    if (isSeller && shopName) {
-      userData.shopName = shopName.trim();
-    }
+   
 
     // Create user — password is hashed in the pre-save hook
     const user = await userModel.create(userData);
@@ -77,7 +74,7 @@ export const register = async (req, res) => {
     await sendTokenResponse(
       user,
       res,
-      `Welcome to ThreadVault, ${user.fullname.split(" ")[0]}! Your account has been created successfully.`,
+      `Welcome to KrishnaFashion, ${user.fullname.split(" ")[0]}! Your account has been created successfully.`,
       201
     );
   } catch (err) {
