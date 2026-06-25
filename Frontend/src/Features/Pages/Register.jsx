@@ -340,6 +340,7 @@ export default function RegisterPage() {
               }
             />
 
+             
             {/* Submit */}
             <button
               type="submit"
@@ -357,6 +358,13 @@ export default function RegisterPage() {
               )}
             </button>
           </form>
+
+             <a href="/api/auth/google"><button
+              className="reg-submit-btn mt-3"
+             >
+                Continue With google
+              </button>
+            </a>
 
           {/* Divider */}
           <div className="reg-divider">

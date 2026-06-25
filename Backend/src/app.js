@@ -1,8 +1,11 @@
+import { config } from "./config/config.js";
 import express from "express";
 import authRouter from "../src/routes/auth.routes.js";
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 const app = express();
 
@@ -10,14 +13,26 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize())
 
-// ── Routes ─────────────────────────────────────────────────────────────────
-app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
-}));
+
+passport.use(new GoogleStrategy({
+    clientID: config.GOOGLE_CLIENT_ID,
+    clientSecret: config.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/api/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // Here you can handle the user profile and save it to your database if needed
+    return done(null, profile);
+  }
+));
+
+
+// // ── Routes ─────────────────────────────────────────────────────────────────
+// app.use(cors({
+//     origin: "http://localhost:5173",
+//     credentials: true
+// }));
 app.use("/api/auth", authRouter);
 
 export default app;

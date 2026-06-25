@@ -228,6 +228,8 @@ export default function LoginPage() {
               </Link>
             </div>
 
+     
+
             {/* Submit */}
             <button
               type="submit"
@@ -244,6 +246,10 @@ export default function LoginPage() {
                 "Sign In to Krishna Fashion ✨"
               )}
             </button>
+
+
+
+
           </form>
 
           {/* Divider */}

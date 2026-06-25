@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { validateRegisteredUser } from "./../validator/auth.validator.js";
-import { register, login, logout } from "../controllers/auth.controller.js";
+import { register, login, logout, googleAuthCallback } from "../controllers/auth.controller.js";
+import passport from "passport";
 
 const router = Router();
 
@@ -12,5 +13,18 @@ router.post("/login", login);
 
 // POST /api/auth/logout
 router.post("/logout", logout);
+
+// below line is used to initiate Google OAuth authentication
+
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+
+// below line is use to verify auth ccode from user and send it to the controller for further processing 
+
+router.get("/google/callback", passport.authenticate("google",{
+    session:false
+}),googleAuthCallback)
+
+
 
 export default router;

@@ -27,14 +27,17 @@ const userSchema = new mongoose.Schema(
 
     contact: {
       type: String,
-      required: [true, "Contact number is required"],
+      required: [false, "Contact number is required"],
       unique: true,
       match: [/^\d{10}$/, "Contact must be a valid 10-digit number"],
     },
 
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: function()
+      {
+        return  !this.googleId
+      },
       minlength: [6, "Password must be at least 6 characters"],
     },
 
@@ -67,6 +70,10 @@ const userSchema = new mongoose.Schema(
     // Timestamps for activity tracking
     lastLogin: {
       type: Date,
+      default: null,
+    },
+    googleId: {
+      type: String,
       default: null,
     },
   },

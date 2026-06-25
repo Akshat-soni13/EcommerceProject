@@ -168,3 +168,39 @@ export const logout = async (req, res) => {
     message: "Logged out successfully.",
   });
 };
+
+
+export const googleAuthCallback = async (req, res) => {
+
+      // console.log(req.user); // This will log the user profile returned by Google
+
+      const { id, displayName, emails, photos } = req.user;
+      const email = emails[0].value;
+      const proilePic = photos[0].value;
+
+      // Check if user already exists
+      let user = await userModel.findOne({ email });
+
+      if (!user) {
+          // If user doesn't exist, create a new user
+          user = new userModel({
+            email,
+            googleId: id, 
+              fullname: displayName,
+              profilePic: proilePic,
+              role: "buyer", // Default role, you can change this based on your requirements
+          });
+          await user.save();
+      }
+
+      await sendTokenResponse(
+        user,
+        res,
+        `Welcome ${user.fullname.split(" ")[0]}! You have successfully logged in with Google.`
+      );
+
+
+      res.redirect("http://localhost:5173/"); // Redirect to your frontend or desired route after successful authentication
+
+}
+
