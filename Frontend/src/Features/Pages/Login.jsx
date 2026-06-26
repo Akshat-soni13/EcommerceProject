@@ -4,6 +4,7 @@ import "../Styles/Login.css";
 import { userAuth } from "../Auth/Hook/useAuth.js"
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ContinueWithgoogle from "../components/ContinueWithgoogle";
 
 // ── InputField — defined OUTSIDE LoginPage to prevent focus loss on re-render ─
 function InputField({
@@ -251,6 +252,9 @@ export default function LoginPage() {
 
 
           </form>
+
+          {/* Google Login */}
+          <ContinueWithgoogle />
 
           {/* Divider */}
           <div className="login-divider">

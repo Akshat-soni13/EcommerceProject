@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import ProductRouter from "./routes/product.routes.js";
 
 const app = express();
 
@@ -34,5 +35,8 @@ passport.use(new GoogleStrategy({
 //     credentials: true
 // }));
 app.use("/api/auth", authRouter);
+app.use("/api/products", ProductRouter);
+
+
 
 export default app;

@@ -5,7 +5,7 @@ import { config } from "./../config/config.js";
 // ==========================================
 // Helper: Sign JWT & send cookie + response
 // ==========================================
-async function sendTokenResponse(user, res, message, statusCode = 200) {
+async function sendTokenResponse(user, res, message, statusCode = 200, redirect = false) {
   const token = jwt.sign(
     {
       id: user._id,
@@ -27,11 +27,13 @@ async function sendTokenResponse(user, res, message, statusCode = 200) {
 
   res.cookie("token", token, cookieOptions);
 
-  res.status(statusCode).json({
-    success: true,
-    message,
-    user: user.toSafeObject(),
-  });
+  if (!redirect) {
+    return res.status(statusCode).json({
+      success: true,
+      message,
+      user: user.toSafeObject(),
+    });
+  }
 }
 
 // ==========================================
@@ -171,36 +173,71 @@ export const logout = async (req, res) => {
 
 
 export const googleAuthCallback = async (req, res) => {
+  try {
+    const { id, displayName, emails, photos } = req.user;
+    const email = emails[0].value;
+    const profilePic = photos && photos[0] ? photos[0].value : null;
 
-      // console.log(req.user); // This will log the user profile returned by Google
+    // Check if user already exists
+    let user = await userModel.findOne({ email });
 
-      const { id, displayName, emails, photos } = req.user;
-      const email = emails[0].value;
-      const proilePic = photos[0].value;
-
-      // Check if user already exists
-      let user = await userModel.findOne({ email });
-
-      if (!user) {
-          // If user doesn't exist, create a new user
-          user = new userModel({
-            email,
-            googleId: id, 
-              fullname: displayName,
-              profilePic: proilePic,
-              role: "buyer", // Default role, you can change this based on your requirements
-          });
-          await user.save();
+    if (!user) {
+      // If user doesn't exist, create a new user
+      user = new userModel({
+        email,
+        googleId: id, 
+        fullname: displayName,
+        avatar: profilePic, // Map avatar field
+        role: "buyer",
+      });
+      await user.save();
+    } else if (!user.googleId) {
+      // If user exists but has no googleId, link it
+      user.googleId = id;
+      if (!user.avatar && profilePic) {
+        user.avatar = profilePic;
       }
+      await user.save();
+    }
 
-      await sendTokenResponse(
-        user,
-        res,
-        `Welcome ${user.fullname.split(" ")[0]}! You have successfully logged in with Google.`
-      );
+    await sendTokenResponse(
+      user,
+      res,
+      `Welcome ${user.fullname.split(" ")[0]}! You have successfully logged in with Google.`,
+      200,
+      true
+    );
 
+    res.redirect("http://localhost:5173/"); // Redirect to frontend
+  } catch (err) {
+    console.error("Google Auth Callback Error:", err);
+    res.redirect("http://localhost:5173/login?error=oauth_failed");
+  }
+};
 
-      res.redirect("http://localhost:5173/"); // Redirect to your frontend or desired route after successful authentication
-
-}
+// ==========================================
+// @route   GET /api/auth/me
+// @desc    Get current user profile
+// @access  Private
+// ==========================================
+export const getMe = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      user: req.user.toSafeObject(),
+    });
+  } catch (err) {
+    console.error("GetMe Controller Error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong on our end. Please try again later.",
+    });
+  }
+};
 

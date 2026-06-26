@@ -4,6 +4,7 @@ import { userAuth } from "../Auth/Hook/useAuth";
 import { useSelector } from "react-redux";
 import "../Styles/Register.css";
 import KrishnaLoader from "../Styles/Loader"
+import ContinueWithgoogle from "../components/ContinueWithgoogle";
 
 
 // ── Password strength helper ─────────────────────────────────────────────────
@@ -359,13 +360,8 @@ export default function RegisterPage() {
             </button>
           </form>
 
-             <a href="/api/auth/google"><button
-              className="reg-submit-btn mt-3"
-             >
-                Continue With google
-              </button>
-            </a>
-
+            {/* Gool=gle */}
+            <ContinueWithgoogle></ContinueWithgoogle>
           {/* Divider */}
           <div className="reg-divider">
             <div className="reg-divider-line" />
