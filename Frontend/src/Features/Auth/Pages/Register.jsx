@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { userAuth } from "../Auth/Hook/useAuth";
+import { userAuth } from "../Hook/useAuth"
 import { useSelector } from "react-redux";
 import "../Styles/Register.css";
 import KrishnaLoader from "../Styles/Loader"
-import ContinueWithgoogle from "../components/ContinueWithgoogle";
+import ContinueWithgoogle from "../components/ContinueWithgoogle"
 
 
 // ── Password strength helper ─────────────────────────────────────────────────

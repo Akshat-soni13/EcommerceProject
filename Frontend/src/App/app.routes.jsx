@@ -1,13 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
-import RegisterPage from "../Features/Pages/Register";
-import KrishnaLoader from "../Features/Styles/Loader"
-import Login from "../Features/Pages/Login"
-import HomePage from "../Features/Pages/Home";
+import RegisterPage from "../Features/Auth/Pages/Register"
+import KrishnaLoader from "../Features/Auth/Styles/Loader"
+import Login from "../Features/Auth/Pages/Login"
+import CreateProduct from "../Features/Products/pages/CreateProduct"
 
 export const routes = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element:<h1>Hello</h1>
   },
   {
     path: "/register",
@@ -20,5 +20,9 @@ export const routes = createBrowserRouter([
   {
     path: "/Login",
     element: <Login></Login>
+  },
+  {
+    path: "/products/create",
+    element: <CreateProduct />,
   },
 ]);

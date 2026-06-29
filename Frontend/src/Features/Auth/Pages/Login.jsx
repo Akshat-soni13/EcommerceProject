@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../Styles/Login.css";
-import { userAuth } from "../Auth/Hook/useAuth.js"
+import { userAuth } from "../Hook/useAuth"
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ContinueWithgoogle from "../components/ContinueWithgoogle";

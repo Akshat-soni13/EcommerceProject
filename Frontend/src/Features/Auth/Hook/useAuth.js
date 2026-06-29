@@ -1,6 +1,6 @@
 import {setError, setLoading, setUser} from "../State/auth.slice"
 
-import { register, login, getMe, logout } from "../../auth.api"
+import { register, login, getMe, logout } from "../auth.api"
 import { useDispatch } from "react-redux"   
 
 

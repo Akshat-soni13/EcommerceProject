@@ -1,0 +1,471 @@
+/* ============================================================
+   CreateProduct.css — Krishna Fashion | Create Product Page
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* -- Keyframes ------------------------------------------------ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes pulse-orb {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 0.85; transform: scale(1.1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(60px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* -- Root / Page ---------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+.cp-page {
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: #080808;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 48px 20px 100px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background ambient orbs */
+.cp-bg-orb-1,
+.cp-bg-orb-2 {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.cp-bg-orb-1 {
+  width: 600px; height: 600px;
+  top: -160px; right: -180px;
+  background: rgba(212, 175, 55, 0.08);
+  animation: pulse-orb 7s ease-in-out infinite;
+}
+.cp-bg-orb-2 {
+  width: 480px; height: 480px;
+  bottom: -100px; left: -140px;
+  background: rgba(212, 175, 55, 0.05);
+  animation: pulse-orb 9s ease-in-out infinite reverse;
+}
+
+/* -- Header --------------------------------------------------- */
+.cp-header {
+  width: 100%;
+  max-width: 780px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 32px;
+  animation: fadeUp 0.55s ease forwards;
+  position: relative;
+  z-index: 1;
+}
+
+.cp-header-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #d4af37 0%, #f0d060 55%, #b8962e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.38);
+  animation: float 4s ease-in-out infinite;
+}
+
+.cp-header-text h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+.cp-header-text p {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 4px 0 0;
+}
+
+/* -- Card ----------------------------------------------------- */
+.cp-card {
+  width: 100%;
+  max-width: 780px;
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid rgba(212, 175, 55, 0.14);
+  border-radius: 26px;
+  padding: 50px 56px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 28px 72px rgba(0, 0, 0, 0.55),
+    0 4px 20px rgba(212, 175, 55, 0.07);
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.65s ease 0.08s both;
+}
+
+/* Top shimmer accent */
+.cp-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55), transparent);
+}
+
+/* -- Form ----------------------------------------------------- */
+.cp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.cp-section-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.65);
+  margin-bottom: -14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* Two-column row */
+.cp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+/* -- Input Groups --------------------------------------------- */
+.cp-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cp-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.15px;
+}
+
+.cp-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cp-input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 15px;
+  color: rgba(212, 175, 55, 0.55);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cp-input,
+.cp-textarea,
+.cp-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.038);
+  border: 1.5px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 13px 16px 13px 42px;
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.22s, background 0.22s, box-shadow 0.22s;
+}
+
+.cp-input::placeholder,
+.cp-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.cp-input:focus,
+.cp-textarea:focus,
+.cp-select:focus {
+  border-color: rgba(212, 175, 55, 0.55);
+  background: rgba(212, 175, 55, 0.04);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1), 0 0 22px rgba(212, 175, 55, 0.06);
+}
+
+.cp-input.has-error,
+.cp-textarea.has-error,
+.cp-select.has-error {
+  border-color: rgba(255, 85, 85, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 85, 85, 0.07);
+}
+
+.cp-input.no-icon,
+.cp-select.no-icon {
+  padding-left: 16px;
+}
+
+.cp-textarea {
+  resize: vertical;
+  min-height: 108px;
+  padding-top: 13px;
+  line-height: 1.65;
+}
+
+.cp-select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23d4af37' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 42px;
+}
+
+.cp-select option {
+  background: #181818;
+  color: #fff;
+}
+
+.cp-char-counter {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.28);
+  text-align: right;
+  margin-top: 2px;
+}
+
+.cp-field-error {
+  font-size: 12px;
+  color: #ff7070;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* -- Image Upload Drop Zone ----------------------------------- */
+.cp-drop-zone {
+  border: 2px dashed rgba(212, 175, 55, 0.22);
+  border-radius: 18px;
+  padding: 36px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.22s, background 0.22s, transform 0.18s;
+  background: rgba(212, 175, 55, 0.018);
+}
+
+.cp-drop-zone:hover,
+.cp-drop-zone.dragging {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.055);
+  transform: scale(1.005);
+}
+
+.cp-drop-zone.has-error {
+  border-color: rgba(255, 85, 85, 0.42);
+}
+
+.cp-drop-zone input[type="file"] {
+  display: none;
+}
+
+.cp-drop-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+
+.cp-drop-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 6px;
+}
+
+.cp-drop-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+.cp-drop-sub span { color: rgba(212, 175, 55, 0.85); font-weight: 600; }
+
+/* -- Image Previews ------------------------------------------- */
+.cp-previews {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.cp-preview-item {
+  position: relative;
+  width: 94px;
+  height: 94px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(212, 175, 55, 0.18);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.cp-preview-item:hover {
+  transform: scale(1.06);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.2);
+}
+
+.cp-preview-item img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+.cp-preview-remove {
+  position: absolute;
+  top: 5px; right: 5px;
+  width: 22px; height: 22px;
+  background: rgba(8, 8, 8, 0.82);
+  border: 1px solid rgba(255, 85, 85, 0.45);
+  border-radius: 50%;
+  color: #ff7070;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.cp-preview-remove:hover {
+  background: rgba(255, 85, 85, 0.28);
+  border-color: rgba(255, 85, 85, 0.8);
+}
+
+/* -- Submit Button -------------------------------------------- */
+.cp-submit-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #c9a227 0%, #e8c84a 48%, #b8962e 100%);
+  color: #1a1200;
+  font-size: 15.5px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s, opacity 0.2s;
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.32);
+  margin-top: 4px;
+}
+
+.cp-submit-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+  background-size: 400px 100%;
+  opacity: 0;
+  animation: shimmer 2.4s infinite;
+  transition: opacity 0.3s;
+}
+
+.cp-submit-btn:hover:not(:disabled)::before { opacity: 1; }
+.cp-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(212, 175, 55, 0.5);
+}
+.cp-submit-btn:active:not(:disabled) { transform: translateY(0); }
+.cp-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.cp-btn-content {
+  display: flex; align-items: center;
+  justify-content: center; gap: 10px;
+}
+
+.cp-spinner {
+  width: 18px; height: 18px;
+  border: 2.5px solid rgba(26, 18, 0, 0.28);
+  border-top-color: #1a1200;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* -- Error Banner --------------------------------------------- */
+.cp-error-banner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 18px;
+  background: rgba(255, 85, 85, 0.07);
+  border: 1px solid rgba(255, 85, 85, 0.22);
+  border-radius: 12px;
+  color: #ff8888;
+  font-size: 13px; font-weight: 500;
+}
+
+/* -- Success Toast -------------------------------------------- */
+.cp-toast {
+  position: fixed;
+  top: 28px; right: 28px;
+  z-index: 9999;
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 24px;
+  background: rgba(16, 14, 8, 0.96);
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.04) inset;
+  animation: toast-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  backdrop-filter: blur(20px);
+  max-width: 340px;
+}
+
+.cp-toast.hiding { animation: toast-out 0.3s ease forwards; }
+
+.cp-toast-icon { font-size: 24px; flex-shrink: 0; }
+
+.cp-toast-text strong {
+  display: block; color: #fff;
+  font-size: 14px; font-weight: 700; margin-bottom: 2px;
+}
+.cp-toast-text span {
+  color: rgba(255,255,255,0.45); font-size: 12px;
+}
+
+/* -- Responsive ----------------------------------------------- */
+@media (max-width: 660px) {
+  .cp-card { padding: 32px 22px; border-radius: 20px; }
+  .cp-row { grid-template-columns: 1fr; }
+  .cp-header-text h1 { font-size: 22px; }
+}
