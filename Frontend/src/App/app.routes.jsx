@@ -3,6 +3,7 @@ import RegisterPage from "../Features/Auth/Pages/Register"
 import KrishnaLoader from "../Features/Auth/Styles/Loader"
 import Login from "../Features/Auth/Pages/Login"
 import CreateProduct from "../Features/Products/pages/CreateProduct"
+import { Dashboard } from "../Features/Products/pages/Dashboard";
 
 export const routes = createBrowserRouter([
   {
@@ -22,7 +23,17 @@ export const routes = createBrowserRouter([
     element: <Login></Login>
   },
   {
-    path: "/products/create",
-    element: <CreateProduct />,
-  },
+    path:"/seller",
+    children:[
+      {
+        path:"/seller/create-product",
+        element:<CreateProduct></CreateProduct>
+      }
+      ,
+      {
+        path:"/seller/dashBoard",
+        element:<Dashboard></Dashboard>
+      }
+    ]
+  }
 ]);

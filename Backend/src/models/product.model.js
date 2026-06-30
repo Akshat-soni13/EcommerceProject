@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema(
     },
     seller: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       default: 0
     },
     description: {

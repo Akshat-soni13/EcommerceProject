@@ -2,13 +2,13 @@ import axios from "axios"
 
 
 const productApiInstace = axios.create({
-    baseUrl:"/api/products",
+    baseURL:"/api/products",
     withCredentials:true
 })
 
 export const getAllProducts = async () => {
 
-    const response = await productApiInstace.get("/")
+    const response = await productApiInstace.get("/seller")
 
     return response.data
 
