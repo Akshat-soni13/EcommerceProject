@@ -109,7 +109,16 @@ export default function LoginPage() {
     const result = await HandleLogin({ email: form.email, password: form.password });
 
     if (result?.success) {
-      navigate("/");
+
+        if(result.user.role=="buyer")
+        {
+          navigate("/")
+        }
+        else if(result.user.role=="seller")
+        {
+          navigate("/seller/dashboard")
+        }
+
     } else {
       setSubmitError(result?.message || "Login failed. Please try again.");
     }

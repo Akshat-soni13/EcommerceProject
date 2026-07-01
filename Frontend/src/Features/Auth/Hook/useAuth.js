@@ -1,4 +1,4 @@
-import {setError, setLoading, setUser} from "../State/auth.slice"
+import {setError, setLoading, setUser, setInitialized} from "../State/auth.slice"
 
 import { register, login, getMe, logout } from "../auth.api"
 import { useDispatch } from "react-redux"   
@@ -17,7 +17,7 @@ export const userAuth = () => {
 
             dispatch(setUser(data.user))
 
-            return { success: true, data }
+            return { success: true, user: data.user }
         } catch (err) {
             const message = err.response?.data?.message || "Registration failed"
             dispatch(setError(message))
@@ -28,8 +28,6 @@ export const userAuth = () => {
     }
 
     
-
-
     async function HandleLogin({email, password}) {
         try {
             dispatch(setLoading(true))
@@ -39,7 +37,7 @@ export const userAuth = () => {
 
             dispatch(setUser(data.user))
 
-            return { success: true, data }
+            return { success: true, user:data.user }
         } catch (err) {
             const message = err.response?.data?.message || "Login failed"
             dispatch(setError(message))
@@ -64,6 +62,7 @@ export const userAuth = () => {
             return { success: false }
         } finally {
             dispatch(setLoading(false))
+            dispatch(setInitialized(true))   // auth check done
         }
     }
 
@@ -85,6 +84,8 @@ export const userAuth = () => {
         }
     }
 
-    return {HandleRegister, HandleLogin, FetchCurrentUser, HandleLogout}
+    
+
+    return {HandleRegister, HandleLogin, FetchCurrentUser, HandleLogout }
 
 }

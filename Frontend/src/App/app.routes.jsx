@@ -4,6 +4,7 @@ import KrishnaLoader from "../Features/Auth/Styles/Loader"
 import Login from "../Features/Auth/Pages/Login"
 import CreateProduct from "../Features/Products/pages/CreateProduct"
 import { Dashboard } from "../Features/Products/pages/Dashboard";
+import Protected from "../Features/Auth/components/Protected";
 
 export const routes = createBrowserRouter([
   {
@@ -27,12 +28,19 @@ export const routes = createBrowserRouter([
     children:[
       {
         path:"/seller/create-product",
-        element:<CreateProduct></CreateProduct>
+        element:<Protected
+        role="seller"
+        >
+          <CreateProduct></CreateProduct>
+        </Protected>
       }
       ,
       {
         path:"/seller/dashBoard",
-        element:<Dashboard></Dashboard>
+        element:
+        <Protected role="seller">
+          <Dashboard></Dashboard>
+        </Protected>
       }
     ]
   }

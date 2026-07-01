@@ -229,8 +229,16 @@ export const getMe = async (req, res) => {
       });
     }
     return res.status(200).json({
+      message: "User profile fetched successfully.",
       success: true,
-      user: req.user.toSafeObject(),
+      user:{
+        id: req.user._id,
+        fullname: req.user.fullname,
+        email: req.user.email,
+        contact: req.user.contact,
+        role: req.user.role,
+        avatar: req.user.avatar || null,
+      }
     });
   } catch (err) {
     console.error("GetMe Controller Error:", err);

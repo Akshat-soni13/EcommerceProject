@@ -6,7 +6,8 @@ const authSlice = createSlice({
     initialState:{
         user:null,
         loading:false,
-        error:null
+        error:null,
+        initialized: false   // false until FetchCurrentUser completes
     },
     reducers:{
         setUser(state,action)
@@ -20,10 +21,14 @@ const authSlice = createSlice({
         setError(state,action)
         {
             state.error= action.payload
+        },
+        setInitialized(state,action)
+        {
+            state.initialized = action.payload
         }
     }
 })
 
-export const {setError,setLoading,setUser}= authSlice.actions
+export const {setError,setLoading,setUser,setInitialized}= authSlice.actions
 
 export default authSlice.reducer
